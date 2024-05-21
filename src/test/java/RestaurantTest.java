@@ -70,7 +70,7 @@ class RestaurantTest {
     // 2. In case the restaurant is closed while this operation is being performed then proper exception should be
     //    thrown.
     @Test
-    public void order_total_of_items_is_matching() throws RestaurantClosedException,ItemNotFoundException{
+    public void order_total_of_items_is_matching() throws RestaurantClosedException, ItemNotFoundException {
         List<String> itemNames = new ArrayList<String>();
         itemNames.add("Sweet corn soup");
         itemNames.add("Vegetable lasagne");
@@ -78,7 +78,7 @@ class RestaurantTest {
     }
 
     @Test
-    public void order_total_throws_exception_if_restaurant_is_closed() throws RestaurantClosedException, ItemNotFoundException{
+    public void order_total_throws_exception_if_restaurant_is_closed() throws RestaurantClosedException, ItemNotFoundException {
         Restaurant spyRestaurant = Mockito.spy(restaurant);
         // Mock the current time to 23:00:00, which is outside the opening and closing time
         Mockito.doReturn(LocalTime.parse("23:00:00")).when(spyRestaurant).getCurrentTime();

@@ -47,6 +47,17 @@ public class Restaurant {
         menu.remove(itemToBeRemoved);
     }
 
+    public int getOrderTotal(List<String> itemNames) throws RestaurantClosedException, ItemNotFoundException {
+        if (!isRestaurantOpen()) {
+            throw new RestaurantClosedException();
+        }
+        int total = 0;
+        for (String name : itemNames) {
+            total += findItemByName(name).getPrice();
+        }
+        return total;
+    }
+
     public void displayDetails() {
         System.out.println("Restaurant:" + name + "\n"
                 + "Location:" + location + "\n"
