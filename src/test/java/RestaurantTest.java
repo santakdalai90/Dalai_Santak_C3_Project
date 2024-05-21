@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RestaurantTest {
     Restaurant restaurant;
     int initialMenuSize;
+    Restaurant spyRestaurant;
 
     //REFACTOR ALL THE REPEATED LINES OF CODE
     @BeforeEach
@@ -21,13 +22,14 @@ class RestaurantTest {
         restaurant.addToMenu("Sweet corn soup", 119);
         restaurant.addToMenu("Vegetable lasagne", 269);
         initialMenuSize = restaurant.getMenu().size();
+
+        spyRestaurant = Mockito.spy(restaurant);
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>OPEN/CLOSED<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //-------FOR THE 2 TESTS BELOW, YOU MAY USE THE CONCEPT OF MOCKING, IF YOU RUN INTO ANY TROUBLE
     @Test
     public void is_restaurant_open_should_return_true_if_time_is_between_opening_and_closing_time() {
-        Restaurant spyRestaurant = Mockito.spy(restaurant);
         // Mock the current time to 11:00:00, which is between the opening and closing time
         Mockito.doReturn(LocalTime.parse("11:00:00")).when(spyRestaurant).getCurrentTime();
         assertTrue(spyRestaurant.isRestaurantOpen());
@@ -35,7 +37,6 @@ class RestaurantTest {
 
     @Test
     public void is_restaurant_open_should_return_false_if_time_is_outside_opening_and_closing_time() {
-        Restaurant spyRestaurant = Mockito.spy(restaurant);
         // Mock the current time to 23:00:00, which is outside the opening and closing time
         Mockito.doReturn(LocalTime.parse("23:00:00")).when(spyRestaurant).getCurrentTime();
         assertFalse(spyRestaurant.isRestaurantOpen());
@@ -71,15 +72,16 @@ class RestaurantTest {
     //    thrown.
     @Test
     public void order_total_of_items_is_matching() throws RestaurantClosedException, ItemNotFoundException {
+        // Mock the current time to 11:00:00, which is between the opening and closing time
+        Mockito.doReturn(LocalTime.parse("11:00:00")).when(spyRestaurant).getCurrentTime();
         List<String> itemNames = new ArrayList<String>();
         itemNames.add("Sweet corn soup");
         itemNames.add("Vegetable lasagne");
-        assertEquals(388, restaurant.getOrderTotal(itemNames));
+        assertEquals(388, spyRestaurant.getOrderTotal(itemNames));
     }
 
     @Test
     public void order_total_throws_exception_if_restaurant_is_closed() throws RestaurantClosedException, ItemNotFoundException {
-        Restaurant spyRestaurant = Mockito.spy(restaurant);
         // Mock the current time to 23:00:00, which is outside the opening and closing time
         Mockito.doReturn(LocalTime.parse("23:00:00")).when(spyRestaurant).getCurrentTime();
         List<String> itemNames = new ArrayList<String>();
